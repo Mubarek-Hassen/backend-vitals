@@ -4,22 +4,28 @@ const app = express()
 const PORT = 3000;
 
 
-app.get("/", (req,res)=>{
-  const today = new Date()
-  const day = today.getDay()
-  console.log(day);
-  const context = {
-    dayType: "a weekday",
-    advice: "work hard"
-  }
+app.use(express.urlencoded({extended: true}))
 
-  if(day === 0 || day === 6){
-    context.dayType = "the weekend"
-    context.advice = "have fun"
-  }
-
-  res.render("index.ejs", context)
+app.get("/", (req, res)=>{
+  res.render("index.ejs")
 })
+
+
+app.post("/submit", (req,res)=>{
+  const name = {
+    fName: req.body["fName"].length,
+    lName: req.body["lName"].length
+  }
+  const nameLength = name.fName+ name.lName
+  res.render("index.ejs", {nameLength})
+})
+
+
+app.get("/names", (req, res)=>{
+  const names = ["ironman", "spider-man", "luffy"];
+  res.render("names.ejs", {names})
+})
+
 
 app.listen(PORT, ()=>{
   console.log(`Listening on port: ${PORT}`)
